@@ -1,16 +1,20 @@
 package me.noahvdaa.dripleaf;
 
 import me.noahvdaa.dripleaf.net.ConnectionHandler;
+import me.noahvdaa.dripleaf.net.KeepAliver;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DripleafServer {
 
 	private final int port;
 
 	public int activeThreads = 0;
+	public List<ConnectionHandler> connections;
 
 	private boolean running;
 
@@ -21,6 +25,8 @@ public class DripleafServer {
 	public void start() {
 		if (running) return;
 		running = true;
+
+		connections = new ArrayList<>();
 
 		// Create the socket server.
 		ServerSocket serverSocket;
@@ -33,6 +39,10 @@ public class DripleafServer {
 		}
 
 		System.out.println("Listening on :" + port + "!");
+
+		// Send out the keepalives.
+		KeepAliver keepAliver = new KeepAliver();
+		keepAliver.run();
 
 		// Main server loop.
 		while (true) {

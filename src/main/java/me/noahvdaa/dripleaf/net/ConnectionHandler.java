@@ -16,6 +16,9 @@ public class ConnectionHandler extends Thread {
 	public ConnectionStatus status = ConnectionStatus.HANDSHAKING;
 	public final Socket connection;
 
+	private DataInputStream in;
+	private DataOutputStream out;
+
 	private String username;
 	private UUID uuid;
 
@@ -27,6 +30,7 @@ public class ConnectionHandler extends Thread {
 	public void run() {
 		System.out.println("Starting thread.");
 		Dripleaf.getServer().activeThreads++;
+		Dripleaf.getServer().connections.add(this);
 
 		try {
 			handle();
@@ -39,11 +43,12 @@ public class ConnectionHandler extends Thread {
 
 		System.out.println("Stopping thread.");
 		Dripleaf.getServer().activeThreads--;
+		Dripleaf.getServer().connections.remove(this);
 	}
 
 	private void handle() throws IOException, InterruptedException {
-		DataInputStream in = new DataInputStream(connection.getInputStream());
-		DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+		in = new DataInputStream(connection.getInputStream());
+		out = new DataOutputStream(connection.getOutputStream());
 
 		while (true) {
 			int packetSize = DataUtils.readVarInt(in);
@@ -94,6 +99,10 @@ public class ConnectionHandler extends Thread {
 						SpawnPositionPacketOut spawnPositionPacketOut = new SpawnPositionPacketOut(this, (byte) 0, (byte) 0, (byte) 0, 90f);
 						spawnPositionPacketOut.send(out);
 
+						// Send  abilities.
+						PlayerAbilitiesPacketOut playerAbilitiesPacketOut = new PlayerAbilitiesPacketOut(this, (byte) 0x07, 0f, 0.1f);
+						playerAbilitiesPacketOut.send(out);
+
 						// Finally, set location.
 						PlayerPositionAndLookPacketOut playerPositionAndLookPacketOut = new PlayerPositionAndLookPacketOut(this, 0d, 0d, 0d, 90f, 0f, (byte) 0x00, 1, false);
 						playerPositionAndLookPacketOut.send(out);
@@ -112,8 +121,20 @@ public class ConnectionHandler extends Thread {
 		}
 	}
 
+	public DataInputStream getIn() {
+		return this.in;
+	}
+
+	public DataOutputStream getOut() {
+		return this.out;
+	}
+
 	public String getUsername() {
 		return this.username;
+	}
+
+	public UUID getUUID() {
+		return this.uuid;
 	}
 
 }
