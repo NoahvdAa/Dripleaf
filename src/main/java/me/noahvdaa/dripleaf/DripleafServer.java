@@ -12,10 +12,6 @@ public class DripleafServer {
 
 	public int activeThreads = 0;
 
-	public final static int PROTOCOL_VERSION = 755;
-	public final static String PROTOCOL_VERSION_STRING = "1.17";
-	public final static String BRAND = "Dripleaf";
-
 	private boolean running;
 
 	public DripleafServer(int port) {

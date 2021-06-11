@@ -1,18 +1,23 @@
 package me.noahvdaa.dripleaf.net;
 
 import me.noahvdaa.dripleaf.Dripleaf;
-import me.noahvdaa.dripleaf.DripleafServer;
+import me.noahvdaa.dripleaf.net.packet.in.HandshakePacketIn;
+import me.noahvdaa.dripleaf.net.packet.in.LoginStartPacketIn;
+import me.noahvdaa.dripleaf.net.packet.in.PingPacketIn;
+import me.noahvdaa.dripleaf.net.packet.out.*;
 import me.noahvdaa.dripleaf.util.DataUtils;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
+import java.util.UUID;
 
 public class ConnectionHandler extends Thread {
 
-	private final Socket connection;
-	private ConnectionStatus status = ConnectionStatus.HANDSHAKING;
+	public ConnectionStatus status = ConnectionStatus.HANDSHAKING;
+	public final Socket connection;
+
+	private String username;
+	private UUID uuid;
 
 	public ConnectionHandler(Socket connection) {
 		this.connection = connection;
@@ -22,17 +27,21 @@ public class ConnectionHandler extends Thread {
 	public void run() {
 		System.out.println("Starting thread.");
 		Dripleaf.getServer().activeThreads++;
+
 		try {
 			handle();
-		} catch (IOException e) {
-			System.out.println("IOException on connection thread:");
+		} catch (Exception e) {
+			System.out.println("Exception on connection thread:");
 			e.printStackTrace();
 		}
+
+		status = ConnectionStatus.CLOSED;
+
 		System.out.println("Stopping thread.");
 		Dripleaf.getServer().activeThreads--;
 	}
 
-	private void handle() throws IOException {
+	private void handle() throws IOException, InterruptedException {
 		DataInputStream in = new DataInputStream(connection.getInputStream());
 		DataOutputStream out = new DataOutputStream(connection.getOutputStream());
 
@@ -50,30 +59,61 @@ public class ConnectionHandler extends Thread {
 			if (packetID == 0x00) {
 				switch (status) {
 					case HANDSHAKING:
-						int protocolVersion = DataUtils.readVarInt(in);
-						String serverAddress = DataUtils.readString(in);
-						int serverPort = in.readUnsignedShort();
-						int nextState = in.read();
-
-						status = nextState == 1 ? ConnectionStatus.STATUS : ConnectionStatus.LOGIN;
+						HandshakePacketIn handshakePacketIn = new HandshakePacketIn(this, in);
+						status = handshakePacketIn.getNextStatus();
 						break;
 					case STATUS:
-						String response = "{\"version\":{\"name\":\"" + DripleafServer.BRAND + " " + DripleafServer.PROTOCOL_VERSION_STRING + "\",\"protocol\":" + DripleafServer.PROTOCOL_VERSION + "},\"players\":{\"max\":" + Dripleaf.getServer().activeThreads + ",\"online\":0,\"sample\":[]},\"description\":{\"text\":\"Powered by Dripleaf\",\"color\":\"green\"},\"favicon\":\"\"}";
-						DataUtils.writeVarInt(out, DataUtils.getVarIntLength(0x00) + DataUtils.getVarIntLength(response.length()) + response.length());
-						DataUtils.writeVarInt(out, 0x00);
-						DataUtils.writeVarInt(out, response.length());
-						out.write(response.getBytes());
-						// Instantly follow up with ping packet.
-						DataUtils.writeVarInt(out, DataUtils.getVarIntLength(0x01) + 8);
-						DataUtils.writeVarInt(out, 0x01);
-						out.writeLong(System.currentTimeMillis());
+						StatusResponsePacketOut statusResponsePacketOut = new StatusResponsePacketOut(this, Dripleaf.BRAND + " " + Dripleaf.PROTOCOL_VERSION_STRING, Dripleaf.PROTOCOL_VERSION, 0, 0);
+						statusResponsePacketOut.send(out);
+
+						// Instantly follow up with pong packet.
+						PongPacketOut pongPacketOut = new PongPacketOut(this, System.currentTimeMillis());
+						pongPacketOut.send(out);
+
+						// Close the connection afterwards.
+						connection.close();
 						return;
+					case LOGIN:
+						LoginStartPacketIn loginStartPacketIn = new LoginStartPacketIn(this, in);
+						username = loginStartPacketIn.getUsername();
+						uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes());
+
+						LoginSuccessPacketOut loginSuccessPacketOut = new LoginSuccessPacketOut(this, uuid, username);
+						loginSuccessPacketOut.send(out);
+
+						// Sleep for a bit.
+						Thread.sleep(500);
+
+						JoinGamePacketOut joinGamePacketOut = new JoinGamePacketOut(this, 1, false, (byte) 0, (byte) 0, 0L, 1, 8, false, false, false, true);
+						joinGamePacketOut.send(out);
+
+						// Set correct status.
+						status = ConnectionStatus.PLAYING;
+
+						// Send spawn position packet. (Not location)
+						SpawnPositionPacketOut spawnPositionPacketOut = new SpawnPositionPacketOut(this, (byte) 0, (byte) 0, (byte) 0, 90f);
+						spawnPositionPacketOut.send(out);
+
+						// Finally, set location.
+						PlayerPositionAndLookPacketOut playerPositionAndLookPacketOut = new PlayerPositionAndLookPacketOut(this, 0d, 0d, 0d, 90f, 0f, (byte) 0x00, 1, false);
+						playerPositionAndLookPacketOut.send(out);
+						break;
 				}
+			} else if (packetID == 0x01) {
+				PingPacketIn pingPacketIn = new PingPacketIn(this, in);
+
+				// Instantly follow up with pong packet.
+				PongPacketOut pongPacketOut = new PongPacketOut(this, pingPacketIn.getPayload());
+				pongPacketOut.send(out);
 			} else {
-				// Unknown packet.
-				System.out.println("Unknown packet.");
+				// Skip packet data.
+				in.skipBytes(DataUtils.getVarIntLength(packetID) - packetSize);
 			}
 		}
+	}
+
+	public String getUsername() {
+		return this.username;
 	}
 
 }
