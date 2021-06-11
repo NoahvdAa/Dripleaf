@@ -13,6 +13,7 @@ public class Dripleaf {
 	public final static String PROTOCOL_VERSION_STRING = "1.17";
 	public final static String BRAND = "Dripleaf";
 	public final static String BRAND_COLOR = "#83aa3b";
+	public final static String BRAND_LEGACY_COLOR = "§a";
 
 	public static void main(String[] args) {
 		System.out.println("Welcome to Dripleaf. Please wait while the server is loading.");
