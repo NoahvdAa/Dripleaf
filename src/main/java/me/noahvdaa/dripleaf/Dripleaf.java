@@ -23,14 +23,17 @@ public class Dripleaf {
 		if (!resourcesFolder.exists()) {
 			resourcesFolder.mkdir();
 		}
-		String[] resourcesToCopy = new String[]{"dimensions.nbt"};
+		String[] resourcesToCopy = new String[]{"dimensions.nbt", "server.properties"};
 		for (String resource : resourcesToCopy) {
 			File resourceFile = new File(resourcesFolder.getPath() + File.separator + resource);
+			if (resource.equals("server.properties")) {
+				resourceFile = new File(resourcesFolder.getParent() + File.separator + resource);
+			}
 
 			// Check if the file exists.
 			if (resourceFile.exists()) continue;
 
-			InputStream inputStream = Dripleaf.class.getClassLoader().getResourceAsStream("dimensions.nbt");
+			InputStream inputStream = Dripleaf.class.getClassLoader().getResourceAsStream(resource);
 
 			System.out.println("Creating resource " + resource + "...");
 
@@ -45,7 +48,7 @@ public class Dripleaf {
 		}
 
 
-		server = new DripleafServer(25565);
+		server = new DripleafServer();
 		server.start();
 	}
 

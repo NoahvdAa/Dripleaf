@@ -85,12 +85,13 @@ public class ConnectionHandler extends Thread {
 						LoginStartPacketIn loginStartPacketIn = new LoginStartPacketIn(this, in);
 						username = loginStartPacketIn.getUsername();
 						uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes());
+						System.out.println(username + uuid);
 
 						LoginSuccessPacketOut loginSuccessPacketOut = new LoginSuccessPacketOut(this, uuid, username);
 						loginSuccessPacketOut.send(out);
 
 						// Sleep for a bit.
-						Thread.sleep(500);
+						Thread.sleep(250);
 
 						JoinGamePacketOut joinGamePacketOut = new JoinGamePacketOut(this, 1, false, (byte) 0, (byte) 0, 0L, 1, 8, false, false, false, true);
 						joinGamePacketOut.send(out);

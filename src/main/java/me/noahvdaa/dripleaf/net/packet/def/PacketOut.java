@@ -29,7 +29,7 @@ public class PacketOut extends Packet {
 		// Then the rest.
 		out.write(bufferArray.toByteArray());
 
-		System.out.println("Sending "+getName()+" with id "+getId()+" and size "+buffer.size());
+		System.out.println("Sending " + getName() + " with id " + getId() + " and size " + buffer.size());
 	}
 
 }
