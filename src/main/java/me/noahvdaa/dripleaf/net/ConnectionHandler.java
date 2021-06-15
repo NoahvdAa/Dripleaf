@@ -128,7 +128,7 @@ public class ConnectionHandler extends Thread {
 				pongPacketOut.send(out);
 			} else {
 				// Skip packet data.
-				in.skipBytes(DataUtils.getVarIntLength(packetID) - packetSize);
+				in.skipBytes(packetSize - DataUtils.getVarIntLength(packetID));
 			}
 		}
 	}
