@@ -19,10 +19,7 @@ public class DripleafServer {
 	public Properties configuration;
 
 	private boolean running;
-
-	public DripleafServer() {
-
-	}
+	private boolean debugMode;
 
 	public void start() {
 		if (running) return;
@@ -36,6 +33,9 @@ public class DripleafServer {
 			e.printStackTrace();
 			return;
 		}
+
+		// Check if debug mode should be enabled.
+		debugMode = configuration.getProperty("debug-mode", "false").equalsIgnoreCase("true");
 
 		connections = new ArrayList<>();
 
@@ -69,6 +69,10 @@ public class DripleafServer {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public boolean isDebugMode() {
+		return this.debugMode;
 	}
 
 }

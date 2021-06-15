@@ -56,7 +56,9 @@ public class ConnectionHandler extends Thread {
 		while (true) {
 			int packetSize = DataUtils.readVarInt(in);
 			int packetID = DataUtils.readVarInt(in);
-			System.out.println("Starting handling of " + packetID + " with size " + packetSize + ".");
+
+			if (Dripleaf.getServer().isDebugMode())
+				System.out.println("Starting handling of " + packetID + " with size " + packetSize + ".");
 
 			// Legacy pings aren't supported right now.
 			if (packetSize == 0xFE) {
@@ -85,7 +87,6 @@ public class ConnectionHandler extends Thread {
 						LoginStartPacketIn loginStartPacketIn = new LoginStartPacketIn(this, in);
 						username = loginStartPacketIn.getUsername();
 						uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes());
-						System.out.println(username + uuid);
 
 						LoginSuccessPacketOut loginSuccessPacketOut = new LoginSuccessPacketOut(this, uuid, username);
 						loginSuccessPacketOut.send(out);

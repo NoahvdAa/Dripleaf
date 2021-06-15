@@ -1,5 +1,6 @@
 package me.noahvdaa.dripleaf.net.packet.def;
 
+import me.noahvdaa.dripleaf.Dripleaf;
 import me.noahvdaa.dripleaf.util.DataUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -29,7 +30,8 @@ public class PacketOut extends Packet {
 		// Then the rest.
 		out.write(bufferArray.toByteArray());
 
-		System.out.println("Sending " + getName() + " with id " + getId() + " and size " + buffer.size());
+		if (Dripleaf.getServer().isDebugMode())
+			System.out.println("Sending " + getName() + " with id " + getId() + " and size " + buffer.size());
 	}
 
 }
