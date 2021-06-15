@@ -20,6 +20,7 @@ public class DripleafServer {
 
 	private boolean running;
 	private boolean debugMode;
+	private boolean bungeecordMode;
 
 	public void start() {
 		if (running) return;
@@ -34,8 +35,15 @@ public class DripleafServer {
 			return;
 		}
 
-		// Check if debug mode should be enabled.
+		// True/false settings
 		debugMode = configuration.getProperty("debug-mode", "false").equalsIgnoreCase("true");
+		bungeecordMode = configuration.getProperty("bungeecord", "false").equalsIgnoreCase("true");
+
+		if (bungeecordMode) {
+			System.out.println("Bungeecord mode enabled.");
+		} else {
+			System.out.println("Bungeecord mode is not enabled. If you're using bungeecord, you should enable it.");
+		}
 
 		connections = new ArrayList<>();
 
@@ -55,7 +63,7 @@ public class DripleafServer {
 
 		// Send out the keepalives.
 		KeepAliver keepAliver = new KeepAliver();
-		keepAliver.run();
+		keepAliver.start();
 
 		// Main server loop.
 		while (true) {
@@ -63,7 +71,7 @@ public class DripleafServer {
 				// Accept the socket.
 				Socket socket = serverSocket.accept();
 				ConnectionHandler ch = new ConnectionHandler(socket);
-				ch.run();
+				ch.start();
 			} catch (IOException e) {
 				System.out.println("Failed to accept connection:");
 				e.printStackTrace();
@@ -73,6 +81,10 @@ public class DripleafServer {
 
 	public boolean isDebugMode() {
 		return this.debugMode;
+	}
+
+	public boolean isBungeecordModeMode() {
+		return this.bungeecordMode;
 	}
 
 }

@@ -23,6 +23,8 @@ public class ConnectionHandler extends Thread {
 	private String username;
 	private UUID uuid;
 
+	private HandshakePacketIn handshakeUsed;
+
 	public ConnectionHandler(Socket connection) {
 		this.connection = connection;
 	}
@@ -69,8 +71,8 @@ public class ConnectionHandler extends Thread {
 			if (packetID == 0x00) {
 				switch (status) {
 					case HANDSHAKING:
-						HandshakePacketIn handshakePacketIn = new HandshakePacketIn(this, in);
-						status = handshakePacketIn.getNextStatus();
+						handshakeUsed = new HandshakePacketIn(this, in);
+						status = handshakeUsed.getNextStatus();
 						break;
 					case STATUS:
 						StatusResponsePacketOut statusResponsePacketOut = new StatusResponsePacketOut(this, Dripleaf.BRAND + " " + Dripleaf.PROTOCOL_VERSION_STRING, Dripleaf.PROTOCOL_VERSION, 0, 0);
@@ -88,6 +90,23 @@ public class ConnectionHandler extends Thread {
 						username = loginStartPacketIn.getUsername();
 						uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes());
 
+						// Bungee handling
+						if (Dripleaf.getServer().isBungeecordModeMode()) {
+							String[] bungeeData = handshakeUsed.getServerAddress().split("\\x00");
+
+							if (bungeeData.length < 4) {
+								// Kick 'em.
+								LoginDisconnectPacketOut kickPacket = new LoginDisconnectPacketOut(this, "{\"text\":\"Please connect using the Bungeecord proxy.\", \"color\": \"red\"}");
+								kickPacket.send(out);
+
+								connection.close();
+								return;
+							} else {
+								// Replace the UUID.
+								uuid = UUID.fromString(bungeeData[2].replaceFirst("([0-9a-fA-F]{8})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]+)", "$1-$2-$3-$4-$5"));
+							}
+						}
+
 						LoginSuccessPacketOut loginSuccessPacketOut = new LoginSuccessPacketOut(this, uuid, username);
 						loginSuccessPacketOut.send(out);
 
@@ -96,9 +115,6 @@ public class ConnectionHandler extends Thread {
 
 						JoinGamePacketOut joinGamePacketOut = new JoinGamePacketOut(this, 1, false, (byte) 0, (byte) 0, 0L, 1, 8, false, false, false, true);
 						joinGamePacketOut.send(out);
-
-						// Set correct status.
-						status = ConnectionStatus.PLAYING;
 
 						// Send server brand packet.
 						ByteArrayOutputStream brandBufferArray = new ByteArrayOutputStream();
@@ -118,6 +134,9 @@ public class ConnectionHandler extends Thread {
 						// Finally, set location.
 						PlayerPositionAndLookPacketOut playerPositionAndLookPacketOut = new PlayerPositionAndLookPacketOut(this, 0d, 0d, 0d, 90f, 0f, (byte) 0x00, 1, false);
 						playerPositionAndLookPacketOut.send(out);
+
+						// Set correct status.
+						status = ConnectionStatus.PLAYING;
 						break;
 				}
 			} else if (packetID == 0x01) {
