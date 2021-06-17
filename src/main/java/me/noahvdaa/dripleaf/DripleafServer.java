@@ -2,6 +2,7 @@ package me.noahvdaa.dripleaf;
 
 import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.KeepAliver;
+import me.noahvdaa.dripleaf.util.Metrics;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -67,6 +68,9 @@ public class DripleafServer {
 			e.printStackTrace();
 			return;
 		}
+
+		// bStats.
+		Metrics.DripleafMetrics.start(this);
 
 		System.out.println("Listening on " + serverSocket.getInetAddress().getHostAddress() + ":" + serverSocket.getLocalPort() + "!");
 
