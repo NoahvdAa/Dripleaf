@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class LoginDisconnectPacketOut extends PacketOut {
 
-	private ConnectionHandler connectionHandler;
+	final ConnectionHandler connectionHandler;
 
 	private String reason;
 

@@ -9,9 +9,9 @@ import java.io.IOException;
 
 public class LoginStartPacketIn extends PacketIn {
 
-	private ConnectionHandler connectionHandler;
+	final ConnectionHandler connectionHandler;
 
-	private String username;
+	private final String username;
 
 	public LoginStartPacketIn(ConnectionHandler connectionHandler, String username) {
 		super("LoginStartPacketIn", 0x00);

@@ -2,16 +2,14 @@ package me.noahvdaa.dripleaf.net.packet.out;
 
 import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.packet.def.PacketOut;
-import me.noahvdaa.dripleaf.util.DataUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.UUID;
 
 public class SpawnPositionPacketOut extends PacketOut {
 
-	private ConnectionHandler connectionHandler;
+	final ConnectionHandler connectionHandler;
 
 	private byte x;
 	private byte y;
@@ -33,12 +31,42 @@ public class SpawnPositionPacketOut extends PacketOut {
 		ByteArrayOutputStream bufferArray = new ByteArrayOutputStream();
 		DataOutputStream buffer = new DataOutputStream(bufferArray);
 
-		buffer.writeLong(((x & 0x3FFFFFF) << 38) | ((z & 0x3FFFFFF) << 12) | (y & 0xFFF));
+		buffer.writeLong(((long) (x & 0x3FFFFFF) << 38) | ((long) (z & 0x3FFFFFF) << 12) | (y & 0xFFF));
 		buffer.writeFloat(angle);
 
 		return bufferArray.toByteArray();
 	}
 
-	// TODO: Add getters and setters, CBA rn.
+	public byte getX() {
+		return this.x;
+	}
+
+	public void setX(byte x) {
+		this.x = x;
+	}
+
+	public byte getY() {
+		return this.y;
+	}
+
+	public void setY(byte y) {
+		this.y = y;
+	}
+
+	public byte getZ() {
+		return this.z;
+	}
+
+	public void setZ(byte z) {
+		this.z = z;
+	}
+
+	public float getAngle() {
+		return this.angle;
+	}
+
+	public void setAngle(float angle) {
+		this.angle = angle;
+	}
 
 }

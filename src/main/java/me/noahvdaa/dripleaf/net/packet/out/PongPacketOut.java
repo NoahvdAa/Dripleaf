@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class PongPacketOut extends PacketOut {
 
-	private ConnectionHandler connectionHandler;
+	final ConnectionHandler connectionHandler;
 
 	private long payload;
 

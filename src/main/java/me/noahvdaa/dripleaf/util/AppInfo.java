@@ -13,14 +13,15 @@ public class AppInfo {
 
 	static {
 		Properties p = new Properties();
-		InputStream inputStream = null;
+		InputStream inputStream;
 		try {
 			inputStream = Dripleaf.class.getClassLoader().getResourceAsStream("info.properties");
 			p.load(inputStream);
 		} catch (IOException e) {
+			// Swallow exception.
 		}
-		version = p.getProperty("version");
-		commit = p.getProperty("commit");
+		version = p.getProperty("version", "?");
+		commit = p.getProperty("commit", "?");
 	}
 
 }

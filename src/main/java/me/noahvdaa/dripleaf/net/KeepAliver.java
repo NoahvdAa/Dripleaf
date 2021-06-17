@@ -26,7 +26,7 @@ public class KeepAliver extends Thread {
 					}
 				}
 			}
-		}, 1000l, 1000l);
+		}, 1000L, 1000L);
 	}
 
 }

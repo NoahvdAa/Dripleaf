@@ -2,7 +2,6 @@ package me.noahvdaa.dripleaf.net.packet.out;
 
 import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.packet.def.PacketOut;
-import me.noahvdaa.dripleaf.util.DataUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -10,7 +9,7 @@ import java.io.IOException;
 
 public class PlayerAbilitiesPacketOut extends PacketOut {
 
-	private ConnectionHandler connectionHandler;
+	final ConnectionHandler connectionHandler;
 
 	private byte flags;
 	private float flyingSpeed;
@@ -37,6 +36,28 @@ public class PlayerAbilitiesPacketOut extends PacketOut {
 		return bufferArray.toByteArray();
 	}
 
-	// TODO: Add getters and setters, CBA rn.
+	public byte getFlags() {
+		return this.flags;
+	}
+
+	public void setFlags(byte flags) {
+		this.flags = flags;
+	}
+
+	public float getFlyingSpeed() {
+		return this.flyingSpeed;
+	}
+
+	public void setFlyingSpeed(float flyingSpeed) {
+		this.flyingSpeed = flyingSpeed;
+	}
+
+	public float getFovMultiplier() {
+		return this.fovMultiplier;
+	}
+
+	public void setFovMultiplier(float fovMultiplier) {
+		this.fovMultiplier = fovMultiplier;
+	}
 
 }

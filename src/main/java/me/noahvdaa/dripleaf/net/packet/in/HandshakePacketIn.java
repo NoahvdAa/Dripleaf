@@ -10,12 +10,12 @@ import java.io.IOException;
 
 public class HandshakePacketIn extends PacketIn {
 
-	private ConnectionHandler connectionHandler;
+	final ConnectionHandler connectionHandler;
 
-	private int protocolVersion;
-	private String serverAddress;
-	private int serverPort;
-	private ConnectionStatus nextStatus;
+	private final int protocolVersion;
+	private final String serverAddress;
+	private final int serverPort;
+	private final ConnectionStatus nextStatus;
 
 	public HandshakePacketIn(ConnectionHandler connectionHandler, int protocolVersion, String serverAddress, int serverPort, ConnectionStatus nextStatus) {
 		super("HandshakePacketIn", 0x00);

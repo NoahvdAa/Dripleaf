@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class StatusResponsePacketOut extends PacketOut {
 
-	private ConnectionHandler connectionHandler;
+	final ConnectionHandler connectionHandler;
 
 	private String versionName;
 	private int protocolVersion;

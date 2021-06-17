@@ -2,8 +2,8 @@ package me.noahvdaa.dripleaf.net.packet.def;
 
 public class Packet {
 
-	private String name;
-	private int id;
+	private final String name;
+	private final int id;
 
 	public Packet(String name, int id) {
 		this.name = name;

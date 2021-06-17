@@ -17,6 +17,7 @@ public class DripleafServer {
 	public int activeThreads = 0;
 	public List<ConnectionHandler> connections;
 	public Properties configuration;
+	public SharedObjectCacher sharedObjectCacher;
 
 	private boolean running;
 	private boolean debugMode;
@@ -31,6 +32,14 @@ public class DripleafServer {
 			configuration.load(new FileInputStream("./server.properties"));
 		} catch (Exception e) {
 			System.out.println("Failed to load server.properties file:");
+			e.printStackTrace();
+			return;
+		}
+
+		try {
+			sharedObjectCacher = new SharedObjectCacher();
+		} catch (IOException e) {
+			System.out.println("Failed to cache shared objects:");
 			e.printStackTrace();
 			return;
 		}

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class KeepAlivePacketOut extends PacketOut {
 
-	private ConnectionHandler connectionHandler;
+	final ConnectionHandler connectionHandler;
 
 	private long payload;
 

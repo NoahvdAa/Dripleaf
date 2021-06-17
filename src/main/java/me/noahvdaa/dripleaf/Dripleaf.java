@@ -23,6 +23,7 @@ public class Dripleaf {
 		if (!resourcesFolder.exists()) {
 			resourcesFolder.mkdir();
 		}
+
 		String[] resourcesToCopy = new String[]{"dimensions.nbt", "server.properties"};
 		for (String resource : resourcesToCopy) {
 			File resourceFile = new File(resourcesFolder.getPath() + File.separator + resource);

@@ -1,18 +1,16 @@
 package me.noahvdaa.dripleaf.net.packet.in;
 
 import me.noahvdaa.dripleaf.net.ConnectionHandler;
-import me.noahvdaa.dripleaf.net.ConnectionStatus;
 import me.noahvdaa.dripleaf.net.packet.def.PacketIn;
-import me.noahvdaa.dripleaf.util.DataUtils;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 
 public class PingPacketIn extends PacketIn {
 
-	private ConnectionHandler connectionHandler;
+	final ConnectionHandler connectionHandler;
 
-	private long payload;
+	private final long payload;
 
 	public PingPacketIn(ConnectionHandler connectionHandler, long payload) {
 		super("PingPacketIn", 0x00);

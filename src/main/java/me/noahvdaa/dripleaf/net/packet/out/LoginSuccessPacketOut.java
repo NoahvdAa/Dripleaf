@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class LoginSuccessPacketOut extends PacketOut {
 
-	private ConnectionHandler connectionHandler;
+	final ConnectionHandler connectionHandler;
 
 	private UUID uuid;
 	private String username;
