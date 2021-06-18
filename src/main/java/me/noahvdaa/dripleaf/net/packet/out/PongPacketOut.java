@@ -1,6 +1,5 @@
 package me.noahvdaa.dripleaf.net.packet.out;
 
-import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.packet.def.PacketOut;
 
 import java.io.ByteArrayOutputStream;
@@ -9,14 +8,11 @@ import java.io.IOException;
 
 public class PongPacketOut extends PacketOut {
 
-	private final ConnectionHandler connectionHandler;
-
 	private long payload;
 
-	public PongPacketOut(ConnectionHandler connectionHandler, long payload) {
+	public PongPacketOut(long payload) {
 		super("PongPacketOut", 0x01);
 
-		this.connectionHandler = connectionHandler;
 		this.payload = payload;
 	}
 

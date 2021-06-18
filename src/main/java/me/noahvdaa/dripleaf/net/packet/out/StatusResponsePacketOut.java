@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import me.noahvdaa.dripleaf.AppConstants;
 import me.noahvdaa.dripleaf.Dripleaf;
-import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.packet.def.PacketOut;
 import me.noahvdaa.dripleaf.util.DataUtils;
 
@@ -14,17 +13,14 @@ import java.io.IOException;
 
 public class StatusResponsePacketOut extends PacketOut {
 
-	final ConnectionHandler connectionHandler;
-
 	private String versionName;
 	private int protocolVersion;
 	private int maxPlayers;
 	private int onlinePlayers;
 
-	public StatusResponsePacketOut(ConnectionHandler connectionHandler, String versionName, int protocolVersion, int maxPlayers, int onlinePlayers) {
+	public StatusResponsePacketOut(String versionName, int protocolVersion, int maxPlayers, int onlinePlayers) {
 		super("StatusResponsePacketOut", 0x00);
 
-		this.connectionHandler = connectionHandler;
 		this.versionName = versionName;
 		this.protocolVersion = protocolVersion;
 		this.maxPlayers = maxPlayers;

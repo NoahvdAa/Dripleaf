@@ -75,11 +75,11 @@ public class ConnectionHandler extends Thread {
 						status = handshakeUsed.getNextStatus();
 						break;
 					case STATUS:
-						StatusResponsePacketOut statusResponsePacketOut = new StatusResponsePacketOut(this, Dripleaf.BRAND + " " + Dripleaf.PROTOCOL_VERSION_STRING, Dripleaf.PROTOCOL_VERSION, 0, 0);
+						StatusResponsePacketOut statusResponsePacketOut = new StatusResponsePacketOut(Dripleaf.BRAND + " " + Dripleaf.PROTOCOL_VERSION_STRING, Dripleaf.PROTOCOL_VERSION, 0, 0);
 						statusResponsePacketOut.send(out);
 
 						// Instantly follow up with pong packet.
-						PongPacketOut pongPacketOut = new PongPacketOut(this, System.currentTimeMillis());
+						PongPacketOut pongPacketOut = new PongPacketOut(System.currentTimeMillis());
 						pongPacketOut.send(out);
 
 						// Close the connection afterwards.
@@ -96,7 +96,7 @@ public class ConnectionHandler extends Thread {
 
 							if (bungeeData.length < 4) {
 								// Kick 'em.
-								LoginDisconnectPacketOut kickPacket = new LoginDisconnectPacketOut(this, "{\"text\":\"Please connect using the Bungeecord proxy.\", \"color\": \"red\"}");
+								LoginDisconnectPacketOut kickPacket = new LoginDisconnectPacketOut("{\"text\":\"Please connect using the Bungeecord proxy.\", \"color\": \"red\"}");
 								kickPacket.send(out);
 
 								connection.close();
@@ -107,32 +107,32 @@ public class ConnectionHandler extends Thread {
 							}
 						}
 
-						LoginSuccessPacketOut loginSuccessPacketOut = new LoginSuccessPacketOut(this, uuid, username);
+						LoginSuccessPacketOut loginSuccessPacketOut = new LoginSuccessPacketOut(uuid, username);
 						loginSuccessPacketOut.send(out);
 
 						// Sleep for a bit.
 						Thread.sleep(250);
 
-						JoinGamePacketOut joinGamePacketOut = new JoinGamePacketOut(this, 1, false, (byte) 0, (byte) 0, 0L, 1, 8, false, false, false, true);
+						JoinGamePacketOut joinGamePacketOut = new JoinGamePacketOut(1, false, (byte) 0, (byte) 0, 0L, 1, 8, false, false, false, true);
 						joinGamePacketOut.send(out);
 
 						// Send server brand packet.
 						ByteArrayOutputStream brandBufferArray = new ByteArrayOutputStream();
 						DataOutputStream brandBuffer = new DataOutputStream(brandBufferArray);
 						DataUtils.writeString(brandBuffer, Dripleaf.BRAND_LEGACY_COLOR + Dripleaf.BRAND + " " + AppConstants.version + " (" + AppConstants.commit + ")§r  ");
-						PluginMessagePacketOut brandPluginMessagePacketOut = new PluginMessagePacketOut(this, "minecraft:brand", brandBufferArray.toByteArray());
+						PluginMessagePacketOut brandPluginMessagePacketOut = new PluginMessagePacketOut("minecraft:brand", brandBufferArray.toByteArray());
 						brandPluginMessagePacketOut.send(out);
 
 						// Send spawn position packet. (Not location)
-						SpawnPositionPacketOut spawnPositionPacketOut = new SpawnPositionPacketOut(this, (byte) 0, (byte) 0, (byte) 0, 90f);
+						SpawnPositionPacketOut spawnPositionPacketOut = new SpawnPositionPacketOut((byte) 0, (byte) 0, (byte) 0, 90f);
 						spawnPositionPacketOut.send(out);
 
 						// Send abilities.
-						PlayerAbilitiesPacketOut playerAbilitiesPacketOut = new PlayerAbilitiesPacketOut(this, (byte) 0x07, 0f, 0.1f);
+						PlayerAbilitiesPacketOut playerAbilitiesPacketOut = new PlayerAbilitiesPacketOut((byte) 0x07, 0f, 0.1f);
 						playerAbilitiesPacketOut.send(out);
 
 						// Finally, set location.
-						PlayerPositionAndLookPacketOut playerPositionAndLookPacketOut = new PlayerPositionAndLookPacketOut(this, 0d, 0d, 0d, 90f, 0f, (byte) 0x00, 1, false);
+						PlayerPositionAndLookPacketOut playerPositionAndLookPacketOut = new PlayerPositionAndLookPacketOut(0d, 0d, 0d, 90f, 0f, (byte) 0x00, 1, false);
 						playerPositionAndLookPacketOut.send(out);
 
 						// Set correct status.
@@ -143,7 +143,7 @@ public class ConnectionHandler extends Thread {
 				PingPacketIn pingPacketIn = new PingPacketIn(this, in);
 
 				// Instantly follow up with pong packet.
-				PongPacketOut pongPacketOut = new PongPacketOut(this, pingPacketIn.getPayload());
+				PongPacketOut pongPacketOut = new PongPacketOut(pingPacketIn.getPayload());
 				pongPacketOut.send(out);
 			} else {
 				// Skip packet data.

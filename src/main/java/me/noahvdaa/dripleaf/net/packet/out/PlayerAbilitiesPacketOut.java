@@ -1,6 +1,5 @@
 package me.noahvdaa.dripleaf.net.packet.out;
 
-import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.packet.def.PacketOut;
 
 import java.io.ByteArrayOutputStream;
@@ -9,16 +8,13 @@ import java.io.IOException;
 
 public class PlayerAbilitiesPacketOut extends PacketOut {
 
-	private final ConnectionHandler connectionHandler;
-
 	private byte flags;
 	private float flyingSpeed;
 	private float fovMultiplier;
 
-	public PlayerAbilitiesPacketOut(ConnectionHandler connectionHandler, byte flags, float flyingSpeed, float fovMultiplier) {
+	public PlayerAbilitiesPacketOut(byte flags, float flyingSpeed, float fovMultiplier) {
 		super("PlayerAbilitiesPacketOut", 0x32);
 
-		this.connectionHandler = connectionHandler;
 		this.flags = flags;
 		this.flyingSpeed = flyingSpeed;
 		this.fovMultiplier = fovMultiplier;

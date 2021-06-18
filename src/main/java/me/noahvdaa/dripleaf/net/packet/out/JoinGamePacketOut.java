@@ -1,7 +1,6 @@
 package me.noahvdaa.dripleaf.net.packet.out;
 
 import me.noahvdaa.dripleaf.Dripleaf;
-import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.packet.def.PacketOut;
 import me.noahvdaa.dripleaf.util.DataUtils;
 
@@ -10,8 +9,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class JoinGamePacketOut extends PacketOut {
-
-	private final ConnectionHandler connectionHandler;
 
 	private int entityId;
 	private boolean isHardcore;
@@ -25,10 +22,9 @@ public class JoinGamePacketOut extends PacketOut {
 	private boolean isDebug;
 	private boolean isFlat;
 
-	public JoinGamePacketOut(ConnectionHandler connectionHandler, int entityId, boolean isHardcore, byte gamemode, byte previousGamemode, long hashedSeed, int maxPlayers, int viewDistance, boolean reducedDebugInfo, boolean enableRespawnScreen, boolean isDebug, boolean isFlat) {
+	public JoinGamePacketOut(int entityId, boolean isHardcore, byte gamemode, byte previousGamemode, long hashedSeed, int maxPlayers, int viewDistance, boolean reducedDebugInfo, boolean enableRespawnScreen, boolean isDebug, boolean isFlat) {
 		super("JoinGamePacketOut", 0x26);
 
-		this.connectionHandler = connectionHandler;
 		this.entityId = entityId;
 		this.isHardcore = isHardcore;
 		this.gamemode = gamemode;

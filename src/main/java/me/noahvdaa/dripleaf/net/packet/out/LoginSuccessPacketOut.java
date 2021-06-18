@@ -11,15 +11,12 @@ import java.util.UUID;
 
 public class LoginSuccessPacketOut extends PacketOut {
 
-	private final ConnectionHandler connectionHandler;
-
 	private UUID uuid;
 	private String username;
 
-	public LoginSuccessPacketOut(ConnectionHandler connectionHandler, UUID uuid, String username) {
+	public LoginSuccessPacketOut(UUID uuid, String username) {
 		super("LoginSuccessPacketOut", 0x02);
 
-		this.connectionHandler = connectionHandler;
 		this.uuid = uuid;
 		this.username = username;
 	}

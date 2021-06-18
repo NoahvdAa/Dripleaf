@@ -10,15 +10,12 @@ import java.io.IOException;
 
 public class PluginMessagePacketOut extends PacketOut {
 
-	private final ConnectionHandler connectionHandler;
-
 	private String identifier;
 	private byte[] payload;
 
-	public PluginMessagePacketOut(ConnectionHandler connectionHandler, String identifier, byte[] payload) {
+	public PluginMessagePacketOut(String identifier, byte[] payload) {
 		super("PluginMessagePacketOut", 0x18);
 
-		this.connectionHandler = connectionHandler;
 		this.identifier = identifier;
 		this.payload = payload;
 	}

@@ -1,6 +1,5 @@
 package me.noahvdaa.dripleaf.net.packet.out;
 
-import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.packet.def.PacketOut;
 import me.noahvdaa.dripleaf.util.DataUtils;
 
@@ -10,14 +9,11 @@ import java.io.IOException;
 
 public class LoginDisconnectPacketOut extends PacketOut {
 
-	private final ConnectionHandler connectionHandler;
-
 	private String reason;
 
-	public LoginDisconnectPacketOut(ConnectionHandler connectionHandler, String reason) {
+	public LoginDisconnectPacketOut(String reason) {
 		super("LoginDisconnectOut", 0x00);
 
-		this.connectionHandler = connectionHandler;
 		this.reason = reason;
 	}
 

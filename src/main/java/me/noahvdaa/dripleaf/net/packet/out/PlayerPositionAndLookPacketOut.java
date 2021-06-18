@@ -10,8 +10,6 @@ import java.io.IOException;
 
 public class PlayerPositionAndLookPacketOut extends PacketOut {
 
-	private final ConnectionHandler connectionHandler;
-
 	private double x;
 	private double y;
 	private double z;
@@ -21,10 +19,9 @@ public class PlayerPositionAndLookPacketOut extends PacketOut {
 	private int teleportId;
 	private boolean dismountVehicle;
 
-	public PlayerPositionAndLookPacketOut(ConnectionHandler connectionHandler, double x, double y, double z, float yaw, float pitch, byte flags, int teleportId, boolean dismountVehicle) {
+	public PlayerPositionAndLookPacketOut(double x, double y, double z, float yaw, float pitch, byte flags, int teleportId, boolean dismountVehicle) {
 		super("PlayerPositionAndLookPacketOut", 0x38);
 
-		this.connectionHandler = connectionHandler;
 		this.x = x;
 		this.y = y;
 		this.z = z;

@@ -15,8 +15,8 @@ import java.util.UUID;
 
 public class Metrics {
 
-	private final DripleafServer server;
-	private final MetricsBase metricsBase;
+	final DripleafServer server;
+	final MetricsBase metricsBase;
 
 	private boolean enabled;
 	private String serverUUID;

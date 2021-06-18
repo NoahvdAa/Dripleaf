@@ -1,6 +1,5 @@
 package me.noahvdaa.dripleaf.net.packet.out;
 
-import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.packet.def.PacketOut;
 
 import java.io.ByteArrayOutputStream;
@@ -9,17 +8,14 @@ import java.io.IOException;
 
 public class SpawnPositionPacketOut extends PacketOut {
 
-	private final ConnectionHandler connectionHandler;
-
 	private byte x;
 	private byte y;
 	private byte z;
 	private float angle;
 
-	public SpawnPositionPacketOut(ConnectionHandler connectionHandler, byte x, byte y, byte z, float angle) {
+	public SpawnPositionPacketOut(byte x, byte y, byte z, float angle) {
 		super("SpawnPositionPacketOut", 0x4B);
 
-		this.connectionHandler = connectionHandler;
 		this.x = x;
 		this.y = y;
 		this.z = z;

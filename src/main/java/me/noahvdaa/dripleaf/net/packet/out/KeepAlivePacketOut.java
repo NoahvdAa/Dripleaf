@@ -1,6 +1,5 @@
 package me.noahvdaa.dripleaf.net.packet.out;
 
-import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.packet.def.PacketOut;
 
 import java.io.ByteArrayOutputStream;
@@ -9,14 +8,11 @@ import java.io.IOException;
 
 public class KeepAlivePacketOut extends PacketOut {
 
-	private final ConnectionHandler connectionHandler;
-
 	private long payload;
 
-	public KeepAlivePacketOut(ConnectionHandler connectionHandler, long payload) {
+	public KeepAlivePacketOut(long payload) {
 		super("KeepAlivePacketOut", 0x21);
 
-		this.connectionHandler = connectionHandler;
 		this.payload = payload;
 	}
 
