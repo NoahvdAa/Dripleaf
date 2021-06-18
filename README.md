@@ -2,7 +2,7 @@
 
 <p align="center">
 	<a href="https://www.codacy.com/gh/NoahvdAa/Dripleaf/dashboard?utm_source=github.com&utm_medium=referral&utm_content=NoahvdAa/Dripleaf&utm_campaign=Badge_Grade">
-		<img src="https://app.codacy.com/project/badge/Grade/0fbf17984fee4bfcb2c0cc2de16b326">
+		<img src="https://app.codacy.com/project/badge/Grade/0fbf17984fee4bfcb2c0cc2de16b3267">
 	</a>
 	<img src="https://img.shields.io/github/last-commit/NoahvdAa/Dripleaf">
 	<a href="https://discord.gg/JQwvFBdFfj">
