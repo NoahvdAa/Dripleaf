@@ -4,8 +4,8 @@ import me.noahvdaa.dripleaf.Dripleaf;
 import me.noahvdaa.dripleaf.net.packet.in.HandshakePacketIn;
 import me.noahvdaa.dripleaf.net.packet.in.LoginStartPacketIn;
 import me.noahvdaa.dripleaf.net.packet.in.PingPacketIn;
-import me.noahvdaa.dripleaf.net.packet.out.*;
 import me.noahvdaa.dripleaf.AppConstants;
+import me.noahvdaa.dripleaf.net.packet.out.*;
 import me.noahvdaa.dripleaf.util.DataUtils;
 
 import java.io.*;
@@ -71,7 +71,7 @@ public class ConnectionHandler extends Thread {
 			if (packetID == 0x00) {
 				switch (status) {
 					case HANDSHAKING:
-						handshakeUsed = new HandshakePacketIn(this, in);
+						handshakeUsed = new HandshakePacketIn(in);
 						status = handshakeUsed.getNextStatus();
 						break;
 					case STATUS:
@@ -86,7 +86,7 @@ public class ConnectionHandler extends Thread {
 						connection.close();
 						return;
 					case LOGIN:
-						LoginStartPacketIn loginStartPacketIn = new LoginStartPacketIn(this, in);
+						LoginStartPacketIn loginStartPacketIn = new LoginStartPacketIn(in);
 						username = loginStartPacketIn.getUsername();
 						uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes());
 
@@ -138,9 +138,12 @@ public class ConnectionHandler extends Thread {
 						// Set correct status.
 						status = ConnectionStatus.PLAYING;
 						break;
+					default:
+						// Don't do anything if the connection is in a different state.
+						break;
 				}
 			} else if (packetID == 0x01) {
-				PingPacketIn pingPacketIn = new PingPacketIn(this, in);
+				PingPacketIn pingPacketIn = new PingPacketIn(in);
 
 				// Instantly follow up with pong packet.
 				PongPacketOut pongPacketOut = new PongPacketOut(pingPacketIn.getPayload());

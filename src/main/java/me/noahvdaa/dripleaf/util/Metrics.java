@@ -15,8 +15,7 @@ import java.util.UUID;
 
 public class Metrics {
 
-	final DripleafServer server;
-	final MetricsBase metricsBase;
+	private final MetricsBase metricsBase;
 
 	private boolean enabled;
 	private String serverUUID;
@@ -27,13 +26,10 @@ public class Metrics {
 	/**
 	 * Creates a new Metrics instance.
 	 *
-	 * @param server    Your server instance.
 	 * @param serviceId The id of the service.
 	 *                  It can be found at <a href="https://bstats.org/what-is-my-plugin-id">What is my plugin id?</a>
 	 */
-	public Metrics(DripleafServer server, int serviceId) {
-		this.server = server;
-
+	public Metrics(int serviceId) {
 		try {
 			loadConfig();
 		} catch (IOException e) {
@@ -122,13 +118,13 @@ public class Metrics {
 		builder.appendField("coreCount", Runtime.getRuntime().availableProcessors());
 	}
 
-	private void appendServiceData(JsonObjectBuilder builder) {
-
+	private void appendServiceData(JsonObjectBuilder ignoredBuilder) {
+		// This is intentionally kept empty.
 	}
 
 	public static class DripleafMetrics {
 		public static void start(DripleafServer server) {
-			Metrics metrics = new Metrics(server, 11722);
+			Metrics metrics = new Metrics(11722);
 
 			metrics.addCustomChart(new SingleLineChart("players", () -> (int) server.connections.stream().filter(c -> c.status == ConnectionStatus.PLAYING).count()));
 

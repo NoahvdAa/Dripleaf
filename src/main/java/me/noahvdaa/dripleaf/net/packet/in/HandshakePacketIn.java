@@ -1,6 +1,5 @@
 package me.noahvdaa.dripleaf.net.packet.in;
 
-import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.ConnectionStatus;
 import me.noahvdaa.dripleaf.net.packet.def.PacketIn;
 import me.noahvdaa.dripleaf.util.DataUtils;
@@ -10,27 +9,22 @@ import java.io.IOException;
 
 public class HandshakePacketIn extends PacketIn {
 
-	private final ConnectionHandler connectionHandler;
-
 	private final int protocolVersion;
 	private final String serverAddress;
 	private final int serverPort;
 	private final ConnectionStatus nextStatus;
 
-	public HandshakePacketIn(ConnectionHandler connectionHandler, int protocolVersion, String serverAddress, int serverPort, ConnectionStatus nextStatus) {
+	public HandshakePacketIn(int protocolVersion, String serverAddress, int serverPort, ConnectionStatus nextStatus) {
 		super("HandshakePacketIn", 0x00);
 
-		this.connectionHandler = connectionHandler;
 		this.protocolVersion = protocolVersion;
 		this.serverAddress = serverAddress;
 		this.serverPort = serverPort;
 		this.nextStatus = nextStatus;
 	}
 
-	public HandshakePacketIn(ConnectionHandler connectionHandler, DataInputStream in) throws IOException {
+	public HandshakePacketIn(DataInputStream in) throws IOException {
 		super("HandshakePacketIn", 0x00);
-
-		this.connectionHandler = connectionHandler;
 
 		protocolVersion = DataUtils.readVarInt(in);
 		serverAddress = DataUtils.readString(in);

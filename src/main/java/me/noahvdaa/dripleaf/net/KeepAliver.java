@@ -18,7 +18,7 @@ public class KeepAliver extends Thread {
 				for (ConnectionHandler connection : Dripleaf.getServer().connections) {
 					// Ignore everyone that isn't playing.
 					if (connection.status != ConnectionStatus.PLAYING) continue;
-					KeepAlivePacketOut keepAlivePacketOut = new KeepAlivePacketOut(connection, System.currentTimeMillis());
+					KeepAlivePacketOut keepAlivePacketOut = new KeepAlivePacketOut(System.currentTimeMillis());
 					try {
 						keepAlivePacketOut.send(connection.getOut());
 					} catch (IOException e) {

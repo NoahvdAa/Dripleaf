@@ -1,5 +1,6 @@
 package me.noahvdaa.dripleaf.util;
 
+import me.noahvdaa.dripleaf.exception.VarIntTooBigException;
 import net.querz.nbt.io.NBTOutputStream;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.Tag;
@@ -26,7 +27,7 @@ public class DataUtils {
 
 			numRead++;
 			if (numRead > 5) {
-				throw new RuntimeException("VarInt is too big");
+				throw new VarIntTooBigException();
 			}
 		} while ((read & 0b10000000) != 0);
 
@@ -48,27 +49,29 @@ public class DataUtils {
 	}
 
 	public static void writeVarInt(DataOutputStream out, int intValue) throws IOException {
+		int value = intValue;
 		do {
-			byte temp = (byte) (intValue & 0b01111111);
-			intValue >>>= 7;
-			if (intValue != 0) {
+			byte temp = (byte) (value & 0b01111111);
+			value >>>= 7;
+			if (value != 0) {
 				temp |= 0b10000000;
 			}
 			out.writeByte(temp);
-		} while (intValue != 0);
+		} while (value != 0);
 	}
 
 	public static int getVarIntLength(int varInt) throws IOException {
+		int value = varInt;
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(buffer);
 		do {
-			byte temp = (byte) (varInt & 0b01111111);
-			varInt >>>= 7;
-			if (varInt != 0) {
+			byte temp = (byte) (value & 0b01111111);
+			value >>>= 7;
+			if (value != 0) {
 				temp |= 0b10000000;
 			}
 			out.writeByte(temp);
-		} while (varInt != 0);
+		} while (value != 0);
 		return buffer.toByteArray().length;
 	}
 
