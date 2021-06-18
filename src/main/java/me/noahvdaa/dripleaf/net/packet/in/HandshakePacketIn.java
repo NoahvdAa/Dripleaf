@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class HandshakePacketIn extends PacketIn {
 
-	final ConnectionHandler connectionHandler;
+	private final ConnectionHandler connectionHandler;
 
 	private final int protocolVersion;
 	private final String serverAddress;

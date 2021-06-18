@@ -1,5 +1,6 @@
 package me.noahvdaa.dripleaf.util;
 
+import me.noahvdaa.dripleaf.AppConstants;
 import me.noahvdaa.dripleaf.DripleafServer;
 import me.noahvdaa.dripleaf.net.ConnectionStatus;
 import org.bstats.MetricsBase;
@@ -131,7 +132,7 @@ public class Metrics {
 
 			metrics.addCustomChart(new SingleLineChart("players", () -> (int) server.connections.stream().filter(c -> c.status == ConnectionStatus.PLAYING).count()));
 
-			metrics.addCustomChart(new SimplePie("dripleafVersion", () -> AppInfo.version));
+			metrics.addCustomChart(new SimplePie("dripleafVersion", () -> AppConstants.version));
 		}
 	}
 

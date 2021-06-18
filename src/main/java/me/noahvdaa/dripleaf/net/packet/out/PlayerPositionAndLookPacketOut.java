@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class PlayerPositionAndLookPacketOut extends PacketOut {
 
-	final ConnectionHandler connectionHandler;
+	private final ConnectionHandler connectionHandler;
 
 	private double x;
 	private double y;

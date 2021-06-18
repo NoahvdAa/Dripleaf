@@ -42,33 +42,33 @@ public class DataUtils {
 		return new String(result);
 	}
 
-	public static void writeString(DataOutputStream out, String value) throws IOException {
-		writeVarInt(out, value.length());
-		out.write(value.getBytes());
+	public static void writeString(DataOutputStream out, String stringValue) throws IOException {
+		writeVarInt(out, stringValue.length());
+		out.write(stringValue.getBytes());
 	}
 
-	public static void writeVarInt(DataOutputStream out, int value) throws IOException {
+	public static void writeVarInt(DataOutputStream out, int intValue) throws IOException {
 		do {
-			byte temp = (byte) (value & 0b01111111);
-			value >>>= 7;
-			if (value != 0) {
+			byte temp = (byte) (intValue & 0b01111111);
+			intValue >>>= 7;
+			if (intValue != 0) {
 				temp |= 0b10000000;
 			}
 			out.writeByte(temp);
-		} while (value != 0);
+		} while (intValue != 0);
 	}
 
-	public static int getVarIntLength(int value) throws IOException {
+	public static int getVarIntLength(int varInt) throws IOException {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(buffer);
 		do {
-			byte temp = (byte) (value & 0b01111111);
-			value >>>= 7;
-			if (value != 0) {
+			byte temp = (byte) (varInt & 0b01111111);
+			varInt >>>= 7;
+			if (varInt != 0) {
 				temp |= 0b10000000;
 			}
 			out.writeByte(temp);
-		} while (value != 0);
+		} while (varInt != 0);
 		return buffer.toByteArray().length;
 	}
 

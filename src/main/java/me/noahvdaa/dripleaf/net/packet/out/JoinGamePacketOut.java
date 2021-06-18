@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class JoinGamePacketOut extends PacketOut {
 
-	final ConnectionHandler connectionHandler;
+	private final ConnectionHandler connectionHandler;
 
 	private int entityId;
 	private boolean isHardcore;

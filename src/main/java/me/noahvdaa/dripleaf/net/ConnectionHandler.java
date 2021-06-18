@@ -5,7 +5,7 @@ import me.noahvdaa.dripleaf.net.packet.in.HandshakePacketIn;
 import me.noahvdaa.dripleaf.net.packet.in.LoginStartPacketIn;
 import me.noahvdaa.dripleaf.net.packet.in.PingPacketIn;
 import me.noahvdaa.dripleaf.net.packet.out.*;
-import me.noahvdaa.dripleaf.util.AppInfo;
+import me.noahvdaa.dripleaf.AppConstants;
 import me.noahvdaa.dripleaf.util.DataUtils;
 
 import java.io.*;
@@ -37,11 +37,11 @@ public class ConnectionHandler extends Thread {
 
 		try {
 			handle();
+		} catch (EOFException e) {
+			// Swallow exception.
 		} catch (Exception e) {
-			if (!(e instanceof EOFException)) {
-				System.out.println("Exception on connection thread:");
-				e.printStackTrace();
-			}
+			System.out.println("Exception on connection thread:");
+			e.printStackTrace();
 		}
 
 		status = ConnectionStatus.CLOSED;
@@ -119,7 +119,7 @@ public class ConnectionHandler extends Thread {
 						// Send server brand packet.
 						ByteArrayOutputStream brandBufferArray = new ByteArrayOutputStream();
 						DataOutputStream brandBuffer = new DataOutputStream(brandBufferArray);
-						DataUtils.writeString(brandBuffer, Dripleaf.BRAND_LEGACY_COLOR + Dripleaf.BRAND + " " + AppInfo.version + " (" + AppInfo.commit + ")§r  ");
+						DataUtils.writeString(brandBuffer, Dripleaf.BRAND_LEGACY_COLOR + Dripleaf.BRAND + " " + AppConstants.version + " (" + AppConstants.commit + ")§r  ");
 						PluginMessagePacketOut brandPluginMessagePacketOut = new PluginMessagePacketOut(this, "minecraft:brand", brandBufferArray.toByteArray());
 						brandPluginMessagePacketOut.send(out);
 

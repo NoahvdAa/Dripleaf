@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class SpawnPositionPacketOut extends PacketOut {
 
-	final ConnectionHandler connectionHandler;
+	private final ConnectionHandler connectionHandler;
 
 	private byte x;
 	private byte y;

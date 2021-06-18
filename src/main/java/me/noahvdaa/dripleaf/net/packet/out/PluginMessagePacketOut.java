@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class PluginMessagePacketOut extends PacketOut {
 
-	final ConnectionHandler connectionHandler;
+	private final ConnectionHandler connectionHandler;
 
 	private String identifier;
 	private byte[] payload;

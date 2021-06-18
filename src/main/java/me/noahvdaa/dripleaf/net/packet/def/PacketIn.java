@@ -4,11 +4,11 @@ import me.noahvdaa.dripleaf.net.ConnectionHandler;
 
 public class PacketIn extends Packet {
 
+	private ConnectionHandler connectionHandler;
+
 	public PacketIn(String name, int id) {
 		super(name, id);
 	}
-
-	private ConnectionHandler connectionHandler;
 
 	public ConnectionHandler getConnectionHandler() {
 		return this.connectionHandler;

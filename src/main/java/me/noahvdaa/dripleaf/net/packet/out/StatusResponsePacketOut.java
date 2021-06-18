@@ -2,8 +2,8 @@ package me.noahvdaa.dripleaf.net.packet.out;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import me.noahvdaa.dripleaf.AppConstants;
 import me.noahvdaa.dripleaf.Dripleaf;
-import me.noahvdaa.dripleaf.DripleafLogo;
 import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.packet.def.PacketOut;
 import me.noahvdaa.dripleaf.util.DataUtils;
@@ -55,7 +55,7 @@ public class StatusResponsePacketOut extends PacketOut {
 		motd.add("version", version);
 		motd.add("players", players);
 		motd.add("description", description);
-		motd.addProperty("favicon", DripleafLogo.Base64); // Temporary.
+		motd.addProperty("favicon", AppConstants.logo);
 
 		String motdString = motd.toString();
 

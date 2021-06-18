@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class PingPacketIn extends PacketIn {
 
-	final ConnectionHandler connectionHandler;
+	private final ConnectionHandler connectionHandler;
 
 	private final long payload;
 

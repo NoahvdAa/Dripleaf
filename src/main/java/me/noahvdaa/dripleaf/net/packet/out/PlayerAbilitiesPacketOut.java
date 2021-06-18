@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class PlayerAbilitiesPacketOut extends PacketOut {
 
-	final ConnectionHandler connectionHandler;
+	private final ConnectionHandler connectionHandler;
 
 	private byte flags;
 	private float flyingSpeed;

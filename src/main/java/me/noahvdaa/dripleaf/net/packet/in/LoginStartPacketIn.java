@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class LoginStartPacketIn extends PacketIn {
 
-	final ConnectionHandler connectionHandler;
+	private final ConnectionHandler connectionHandler;
 
 	private final String username;
 
