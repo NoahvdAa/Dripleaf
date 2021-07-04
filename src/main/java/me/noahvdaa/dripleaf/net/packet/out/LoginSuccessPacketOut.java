@@ -1,6 +1,5 @@
 package me.noahvdaa.dripleaf.net.packet.out;
 
-import me.noahvdaa.dripleaf.net.ConnectionHandler;
 import me.noahvdaa.dripleaf.net.packet.def.PacketOut;
 import me.noahvdaa.dripleaf.util.DataUtils;
 
