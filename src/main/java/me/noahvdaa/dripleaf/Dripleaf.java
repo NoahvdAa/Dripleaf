@@ -1,5 +1,7 @@
 package me.noahvdaa.dripleaf;
 
+import me.noahvdaa.dripleaf.util.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +11,7 @@ public class Dripleaf {
 
 	private static DripleafServer server;
 
+	public final static long startedOn = System.currentTimeMillis();
 	public final static int PROTOCOL_VERSION = 755;
 	public final static String PROTOCOL_VERSION_STRING = "1.17";
 	public final static String BRAND = "Dripleaf";
@@ -36,18 +39,17 @@ public class Dripleaf {
 
 			InputStream inputStream = Dripleaf.class.getClassLoader().getResourceAsStream(resource);
 
-			System.out.println("Creating resource " + resource + "...");
+			Logger.info("Copying resource " + resource + "...");
 
 			try {
 				Files.copy(inputStream, resourceFile.toPath());
 			} catch (IOException e) {
-				System.out.println("Failed to create resource " + resource + ":");
+				Logger.info("Failed to copy resource " + resource + ":");
 				e.printStackTrace();
 				return;
 			}
-			System.out.println("Created resource " + resource + "!");
+			Logger.info("Copied resource " + resource + "!");
 		}
-
 
 		server = new DripleafServer();
 		server.start();

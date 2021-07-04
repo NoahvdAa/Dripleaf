@@ -2,6 +2,7 @@ package me.noahvdaa.dripleaf.net.packet.def;
 
 import me.noahvdaa.dripleaf.Dripleaf;
 import me.noahvdaa.dripleaf.util.DataUtils;
+import me.noahvdaa.dripleaf.util.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -30,8 +31,7 @@ public class PacketOut extends Packet {
 		// Then the rest.
 		out.write(bufferArray.toByteArray());
 
-		if (Dripleaf.getServer().isDebugMode())
-			System.out.println("Sending " + getName() + " with id " + getId() + " and size " + buffer.size());
+		Logger.debug("Sending " + getName() + " with id " + Integer.toHexString(getId()) + " and size " + buffer.size());
 	}
 
 }

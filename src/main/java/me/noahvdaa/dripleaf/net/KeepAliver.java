@@ -15,6 +15,7 @@ public class KeepAliver extends Thread {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
+				Thread.currentThread().setName("keepalive");
 				for (ConnectionHandler connection : Dripleaf.getServer().connections) {
 					// Ignore everyone that isn't playing.
 					if (connection.status != ConnectionStatus.PLAYING) continue;

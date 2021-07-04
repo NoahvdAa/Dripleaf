@@ -1,12 +1,11 @@
 package me.noahvdaa.dripleaf.net;
 
 import me.noahvdaa.dripleaf.Dripleaf;
-import me.noahvdaa.dripleaf.net.packet.in.HandshakePacketIn;
-import me.noahvdaa.dripleaf.net.packet.in.LoginStartPacketIn;
-import me.noahvdaa.dripleaf.net.packet.in.PingPacketIn;
+import me.noahvdaa.dripleaf.net.packet.in.*;
 import me.noahvdaa.dripleaf.AppConstants;
 import me.noahvdaa.dripleaf.net.packet.out.*;
 import me.noahvdaa.dripleaf.util.DataUtils;
+import me.noahvdaa.dripleaf.util.Logger;
 
 import java.io.*;
 import java.net.Socket;
@@ -16,13 +15,13 @@ public class ConnectionHandler extends Thread {
 
 	public ConnectionStatus status = ConnectionStatus.HANDSHAKING;
 	public final Socket connection;
+	public int threadId;
 
 	private DataInputStream in;
 	private DataOutputStream out;
 
 	private String username;
 	private UUID uuid;
-
 	private HandshakePacketIn handshakeUsed;
 
 	public ConnectionHandler(Socket connection) {
@@ -31,8 +30,11 @@ public class ConnectionHandler extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("Starting thread.");
-		Dripleaf.getServer().activeThreads++;
+		threadId = Dripleaf.getServer().threadId++;
+		Thread.currentThread().setName(threadId + "-ANONYMOUS");
+
+		Logger.debug("Starting connection thread.");
+
 		Dripleaf.getServer().connections.add(this);
 
 		try {
@@ -40,14 +42,14 @@ public class ConnectionHandler extends Thread {
 		} catch (EOFException e) {
 			// Swallow exception.
 		} catch (Exception e) {
-			System.out.println("Exception on connection thread:");
-			e.printStackTrace();
+			Logger.debug("Exception on connection thread:");
+			if (Dripleaf.getServer().isDebugMode())
+				e.printStackTrace();
 		}
 
 		status = ConnectionStatus.CLOSED;
 
-		System.out.println("Stopping thread.");
-		Dripleaf.getServer().activeThreads--;
+		Logger.debug("Stopping connection thread.");
 		Dripleaf.getServer().connections.remove(this);
 	}
 
@@ -59,8 +61,7 @@ public class ConnectionHandler extends Thread {
 			int packetSize = DataUtils.readVarInt(in);
 			int packetID = DataUtils.readVarInt(in);
 
-			if (Dripleaf.getServer().isDebugMode())
-				System.out.println("Starting handling of " + packetID + " with size " + packetSize + ".");
+			Logger.debug("Starting handling of 0x" + String.format("%02X", packetID) + " with size " + packetSize + ".");
 
 			// Legacy pings aren't supported right now.
 			if (packetSize == 0xFE) {
@@ -89,6 +90,9 @@ public class ConnectionHandler extends Thread {
 						LoginStartPacketIn loginStartPacketIn = new LoginStartPacketIn(in);
 						username = loginStartPacketIn.getUsername();
 						uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes());
+
+						Thread.currentThread().setName(threadId + "-" + username);
+						Logger.debug("Player is " + username + " (" + uuid + ")!");
 
 						// Bungee handling
 						if (Dripleaf.getServer().isBungeecordModeMode()) {
@@ -148,7 +152,17 @@ public class ConnectionHandler extends Thread {
 				// Instantly follow up with pong packet.
 				PongPacketOut pongPacketOut = new PongPacketOut(pingPacketIn.getPayload());
 				pongPacketOut.send(out);
+			} else if (packetID == 0x0F) {
+				// We don't need to respond with anything.
+				new KeepAlivePacketIn(in);
+			} else if(packetID == 0x11) {
+				// We don't need to respond with anything.
+				new PlayerPositionPacketIn(in);
+			} else if(packetID == 0x13) {
+				// We don't need to respond with anything.
+				new PlayerRotationPacketIn(in);
 			} else {
+				Logger.debug("Packet 0x" + String.format("%02X", packetID) + " is unimplemented, ignoring it.");
 				// Skip packet data.
 				in.skipBytes(packetSize - DataUtils.getVarIntLength(packetID));
 			}
