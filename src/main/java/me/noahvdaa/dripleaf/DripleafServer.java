@@ -18,7 +18,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Stream;
 
 public class DripleafServer {
 
@@ -35,6 +34,9 @@ public class DripleafServer {
 	public void start() {
 		if (running) return;
 		running = true;
+
+		Console console = new Console(this);
+		console.start();
 
 		configuration = new Properties();
 		try {

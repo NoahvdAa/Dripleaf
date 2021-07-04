@@ -31,7 +31,7 @@ public class ConnectionHandler extends Thread {
 	@Override
 	public void run() {
 		threadId = Dripleaf.getServer().threadId++;
-		Thread.currentThread().setName(threadId + "-ANONYMOUS");
+		setName(threadId + "-ANONYMOUS");
 
 		Logger.debug("Starting connection thread.");
 
@@ -91,7 +91,7 @@ public class ConnectionHandler extends Thread {
 						username = loginStartPacketIn.getUsername();
 						uuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes());
 
-						Thread.currentThread().setName(threadId + "-" + username);
+						setName(threadId + "-" + username);
 						Logger.debug("Player is " + username + " (" + uuid + ")!");
 
 						// Bungee handling
