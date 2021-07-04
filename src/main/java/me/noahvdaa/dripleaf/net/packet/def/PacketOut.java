@@ -31,7 +31,7 @@ public class PacketOut extends Packet {
 		// Then the rest.
 		out.write(bufferArray.toByteArray());
 
-		Logger.debug("Sending " + getName() + " with id " + Integer.toHexString(getId()) + " and size " + buffer.size());
+		Logger.debug("Sending " + getName() + " with id 0x" + Integer.toHexString(getId()) + " and size " + buffer.size());
 	}
 
 }
