@@ -35,9 +35,6 @@ public class DripleafServer {
 		if (running) return;
 		running = true;
 
-		Console console = new Console(this);
-		console.start();
-
 		configuration = new Properties();
 		try {
 			configuration.load(new FileInputStream("./server.properties"));
@@ -83,6 +80,9 @@ public class DripleafServer {
 
 		Logger.info("Listening on " + serverSocket.getInetAddress().getHostAddress() + ":" + serverSocket.getLocalPort() + "!");
 		Logger.info("Done (" + new DecimalFormat("#.00").format((System.currentTimeMillis() - Dripleaf.startedOn) / 1000) + "s)!  For help, type \"help\".");
+
+		Console console = new Console(this);
+		console.start();
 
 		// Shutdown hook.
 		Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
