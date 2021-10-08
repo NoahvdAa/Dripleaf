@@ -12,8 +12,8 @@ public class Dripleaf {
 	private static DripleafServer server;
 
 	public final static long startedOn = System.currentTimeMillis();
-	public final static int PROTOCOL_VERSION = 755;
-	public final static String PROTOCOL_VERSION_STRING = "1.17";
+	public final static int PROTOCOL_VERSION = 756;
+	public final static String PROTOCOL_VERSION_STRING = "1.17.1";
 	public final static String BRAND = "Dripleaf";
 	public final static String BRAND_COLOR = "#83aa3b";
 	public final static String BRAND_LEGACY_COLOR = "§a";
